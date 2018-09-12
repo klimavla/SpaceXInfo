@@ -33,8 +33,6 @@ public class RocketFragment extends Fragment  {
 
     public static Fragment newInstance() {
         Fragment frag = new RocketFragment();
-        Bundle args = new Bundle();
-        frag.setArguments(args);
         return frag;
     }
 
@@ -49,12 +47,6 @@ public class RocketFragment extends Fragment  {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        // retrieve text and color from bundle or savedInstanceState
-        if (savedInstanceState == null) {
-            Bundle args = getArguments();
-        } else {
-        }
 
         // initialize views
         mContent = view.findViewById(R.id.fragment_content);

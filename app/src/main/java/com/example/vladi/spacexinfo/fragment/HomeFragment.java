@@ -38,11 +38,9 @@ public class HomeFragment  extends Fragment implements Callback<Info> {
     private View mContent;
     private RecyclerView mRecycler;
     static final String BASE_URL = "https://api.spacexdata.com/";
-private  LinearLayout containerLayout;
+    private  LinearLayout containerLayout;
     public static Fragment newInstance() {
         Fragment frag = new HomeFragment();
-        Bundle args = new Bundle();
-        frag.setArguments(args);
         return frag;
     }
 
@@ -58,11 +56,6 @@ private  LinearLayout containerLayout;
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // retrieve text and color from bundle or savedInstanceState
-        if (savedInstanceState == null) {
-            Bundle args = getArguments();
-        } else {
-        }
         mContent = view;
         Gson gson = new GsonBuilder()
                 .setLenient()
@@ -85,10 +78,8 @@ private  LinearLayout containerLayout;
 
         Call<Info> call = rocketAPI.loadInfo();
         call.enqueue(this);
-
-
+        
         Glide.with(getContext()).load("https://www.spacex.com/sites/spacex/files/styles/new_gallery_large/public/2016_-_11-its.jpg?itok=yTl_JcuG").into((ImageView) mContent.findViewById(R.id.backdrop));
-
     }
 
     @Override

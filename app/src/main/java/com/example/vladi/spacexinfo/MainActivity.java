@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity
             frag = LaunchFragment.newInstance();
         }
 
-
         if (frag != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.frame_container, frag, frag.getTag());

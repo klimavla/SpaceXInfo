@@ -44,8 +44,6 @@ public class LaunchFragment extends Fragment {
 
     public static Fragment newInstance() {
         Fragment frag = new LaunchFragment();
-        Bundle args = new Bundle();
-        frag.setArguments(args);
         return frag;
     }
 
