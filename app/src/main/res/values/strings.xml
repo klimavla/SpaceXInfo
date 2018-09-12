@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">SpaceX Info</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">SpaceX Info</string>
+    <string name="nav_header_subtitle">https://www.spacex.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_home">Home</string>
+    <string name="title_rockets">Rockets</string>
+    <string name="title_launch">Launch</string>
+    <string name="ceo">Ceo</string>
+    <string name="coo">Coo</string>
+    <string name="cto">Cto</string>
+    <string name="cto_propulsion">Cto propulsion</string>
+    <string name="employees">Employees</string>
+    <string name="vehicles">Vehicles</string>
+    <string name="launch_sites">Launch sites</string>
+    <string name="test_sites">Test sites</string>
+    <string name="founder">Founder</string>
+    <string name="founded">Founded</string>
+    <string name="valuation">Valuation</string>
+    <string name="headquarters">Headquarters</string>
+    <string name="all">All</string>
+    <string name="active">Active</string>
+    <string name="inactive">Inactive</string>
+    <string name="type">Type</string>
+    <string name="description">Description</string>
+    <string name="meter">m</string>
+    <string name="feet">ft</string>
+    <string name="height">Height</string>
+    <string name="diameter">Diameter</string>
+    <string name="success_rate">Success rate</string>
+    <string name="first_flight">First flight</string>
+    <string name="company">Company</string>
+    <string name="country">Country</string>
+</resources>
