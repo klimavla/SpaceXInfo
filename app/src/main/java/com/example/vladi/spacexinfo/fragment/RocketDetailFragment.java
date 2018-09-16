@@ -39,7 +39,6 @@ public class RocketDetailFragment extends Fragment implements Callback<Rocket> {
 
 
     private View mContent;
-    private RecyclerView mRecycler;
     private LinearLayout containerLayout;
     static final String BASE_URL = "https://api.spacexdata.com/";
     static final String KEY_ROCKETID = "rocket_id";
@@ -52,6 +51,12 @@ public class RocketDetailFragment extends Fragment implements Callback<Rocket> {
         return frag;
     }
 
+    private void add_row(String title, String value){
+        View child = getLayoutInflater().inflate(R.layout.item_card, null);
+        ((TextView)child.findViewById(R.id.item_name)).setText(title);
+        ((TextView)child.findViewById(R.id.item_value)).setText(value);
+        containerLayout.addView(child);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,7 +69,6 @@ public class RocketDetailFragment extends Fragment implements Callback<Rocket> {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         String rocketId ="";
-        // retrieve text and color from bundle or savedInstanceState
         if (savedInstanceState == null) {
             Bundle args = getArguments();
             rocketId = args.getString(KEY_ROCKETID);
@@ -108,13 +112,6 @@ public class RocketDetailFragment extends Fragment implements Callback<Rocket> {
                 return false;
             }
         });
-    }
-
-    private void add_row(String title, String value){
-        View child = getLayoutInflater().inflate(R.layout.item_card, null);
-        ((TextView)child.findViewById(R.id.item_name)).setText(title);
-        ((TextView)child.findViewById(R.id.item_value)).setText(value);
-        containerLayout.addView(child);
     }
 
     @Override

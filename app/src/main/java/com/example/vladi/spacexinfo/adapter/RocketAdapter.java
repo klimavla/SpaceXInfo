@@ -1,38 +1,21 @@
 package com.example.vladi.spacexinfo.adapter;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.vladi.spacexinfo.R;
-import com.example.vladi.spacexinfo.fragment.HomeFragment;
-import com.example.vladi.spacexinfo.fragment.LaunchFragment;
-import com.example.vladi.spacexinfo.fragment.RocketDetailFragment;
-import com.example.vladi.spacexinfo.fragment.RocketFragment;
 import com.example.vladi.spacexinfo.interfaces.RocketApiInterface;
 import com.example.vladi.spacexinfo.model.rocket.Rocket;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.List;
-
-import javax.sql.DataSource;
 
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
@@ -52,63 +35,6 @@ public class RocketAdapter extends RecyclerView.Adapter<RocketAdapter.MyViewHold
 
     public interface RocketAdapterClickListener {
         void recyclerViewClick(String rocketID);
-    }
-
-    @Override
-    public void onResponse(Call<List<Rocket>> call, Response<List<Rocket>> response) {
-
-        if(response.isSuccessful()) {
-            rocketList.clear();
-            List<Rocket> rockets = response.body();
-            rocketList.addAll(rockets);
-            for (Rocket rocket: rocketList ) {
-                rocket.loadThumbnailUrl(this,mContext);
-            }
-            notifyDataSetChanged();
-        } else {
-            System.out.println(response.errorBody());
-        }
-    }
-
-    @Override
-    public void onFailure(Call<List<Rocket>> call, Throwable t) {
-        t.printStackTrace();
-    }
-
-    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView title, count;
-        public ImageView thumbnail;
-        public View mainView;
-        public RocketClickListener listener;
-        public String rocketID;
-
-        //listener passed to viewHolder
-        public interface RocketClickListener {
-            void rocketOnClick(String rocketID);
-        }
-
-        public MyViewHolder(View view,RocketClickListener listener) {
-            super(view);
-            title = view.findViewById(R.id.title);
-            count = view.findViewById(R.id.count);
-            thumbnail = view.findViewById(R.id.thumbnail);
-            mainView = view;
-
-            this.listener = listener;
-            view.setOnClickListener(this);
-
-        }
-
-        @Override
-        public void onClick(View v) {
-            listener.rocketOnClick(this.rocketID);
-        }
-    }
-
-    public void addAll(List<Rocket> rocketList) {
-        this.rocketList.clear();
-        this.rocketList.addAll(rocketList);
-        this.notifyDataSetChanged();
     }
 
     public RocketAdapter(Context mContext, List<Rocket> rocketList, RocketAdapterClickListener clickLisener) {
@@ -139,6 +65,28 @@ public class RocketAdapter extends RecyclerView.Adapter<RocketAdapter.MyViewHold
     }
 
     @Override
+    public void onResponse(Call<List<Rocket>> call, Response<List<Rocket>> response) {
+
+        if(response.isSuccessful()) {
+            rocketList.clear();
+            List<Rocket> rockets = response.body();
+            rocketList.addAll(rockets);
+            for (Rocket rocket: rocketList ) {
+                rocket.loadThumbnailUrl(this,mContext);
+            }
+            notifyDataSetChanged();
+        } else {
+            System.out.println(response.errorBody());
+        }
+    }
+
+    @Override
+    public void onFailure(Call<List<Rocket>> call, Throwable t) {
+        t.printStackTrace();
+    }
+
+
+    @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.rocket_card, parent, false);
@@ -167,5 +115,33 @@ public class RocketAdapter extends RecyclerView.Adapter<RocketAdapter.MyViewHold
     @Override
     public int getItemCount() {
         return rocketList.size();
+    }
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public TextView title, count;
+        public ImageView thumbnail;
+        public RocketClickListener listener;
+        public String rocketID;
+
+        //listener passed to viewHolder
+        public interface RocketClickListener {
+            void rocketOnClick(String rocketID);
+        }
+
+        public MyViewHolder(View view,RocketClickListener listener) {
+            super(view);
+            title = view.findViewById(R.id.title);
+            count = view.findViewById(R.id.count);
+            thumbnail = view.findViewById(R.id.thumbnail);
+
+            this.listener = listener;
+            view.setOnClickListener(this);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            listener.rocketOnClick(this.rocketID);
+        }
     }
 }

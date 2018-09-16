@@ -27,8 +27,6 @@ import retrofit2.Response;
 
 public class RocketFragment extends Fragment  {
 
-
-    private View mContent;
     private RecyclerView mRecycler;
 
     public static Fragment newInstance() {
@@ -36,6 +34,10 @@ public class RocketFragment extends Fragment  {
         return frag;
     }
 
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,8 +50,6 @@ public class RocketFragment extends Fragment  {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // initialize views
-        mContent = view.findViewById(R.id.fragment_content);
         mRecycler = view.findViewById(R.id.recycler_view);
 
         ArrayList rocketList = new ArrayList<>();
@@ -112,10 +112,4 @@ public class RocketFragment extends Fragment  {
             }
         }
     }
-
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
-    }
-
 }

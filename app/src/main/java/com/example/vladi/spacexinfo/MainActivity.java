@@ -19,13 +19,31 @@ import com.example.vladi.spacexinfo.fragment.RocketFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private void switchFragment(int id){
+        Fragment frag = null;
+        // Handle navigation view item clicks here.
+
+        if (id == R.id.navigation_home) {
+            frag = HomeFragment.newInstance();
+        } else if (id == R.id.navigation_rockets) {
+            frag = RocketFragment.newInstance();
+        } else if (id == R.id.navigation_launches) {
+            frag = LaunchFragment.newInstance();
+        }
+
+        if (frag != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.frame_container, frag, frag.getTag());
+            ft.commit();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -54,30 +72,9 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
         switchFragment( item.getItemId());
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    private void switchFragment(int id){
-        Fragment frag = null;
-        // Handle navigation view item clicks here.
-
-        if (id == R.id.navigation_home) {
-            frag = HomeFragment.newInstance();
-        } else if (id == R.id.navigation_rockets) {
-            frag = RocketFragment.newInstance();
-        } else if (id == R.id.navigation_launches) {
-            frag = LaunchFragment.newInstance();
-        }
-
-        if (frag != null) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.frame_container, frag, frag.getTag());
-            ft.commit();
-        }
-    }
-
 }

@@ -40,51 +40,18 @@ public class LaunchAdapter extends RecyclerView.Adapter<LaunchAdapter.MyViewHold
     private LaunchApiInterface launchApiInterface;
     static final String BASE_URL = "https://api.spacexdata.com/";
 
-    @Override
-    public void onResponse(Call<List<Launch>> call, Response<List<Launch>> response) {
-
-        Log.w("LaunchAdapter", "response" );
-        if(response.isSuccessful()) {
-            launchList.clear();
-            List<Launch> launches = response.body();
-            launchList.addAll(launches);
-
-            notifyDataSetChanged();
-        } else {
-            System.out.println(response.errorBody());
-        }
+    public LaunchAdapter(Context mContext, List<Launch> launchList, String year, String rocket) {
+        this.mContext = mContext;
+        this.launchList = launchList;
+        this.rocketId = rocket;
+        this.year = year;
+        this.utcFormat= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");//2008-09-28T23:15:00.000Z
+        this.showFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+        init_retrofit();
+        load_data(year,rocket);
     }
 
-    @Override
-    public void onFailure(Call<List<Launch>> call, Throwable t) {
-        t.printStackTrace();
-    }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView mission_name, flight_number,date,rocket;
-        public ImageView thumbnail;
-
-        public MyViewHolder(View view) {
-            super(view);
-            mission_name = view.findViewById(R.id.mission_name);
-            flight_number = view.findViewById(R.id.flight_number);
-            date = view.findViewById(R.id.date);
-            rocket = view.findViewById(R.id.rocket);
-            thumbnail = view.findViewById(R.id.thumbnail);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
-        }
-    }
-
-    public void addAll(List<Launch> launchList) {
-        this.launchList.clear();
-        this.launchList.addAll(launchList);
-        this.notifyDataSetChanged();
-    }
 
     public void setRocketId(String id){
         rocketId = id;
@@ -96,16 +63,6 @@ public class LaunchAdapter extends RecyclerView.Adapter<LaunchAdapter.MyViewHold
         load_data(year,rocketId);
     }
 
-    public LaunchAdapter(Context mContext, List<Launch> launchList, String year, String rocket) {
-        this.mContext = mContext;
-        this.launchList = launchList;
-        this.rocketId = rocket;
-        this.year = year;
-        this.utcFormat= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");//2008-09-28T23:15:00.000Z
-        this.showFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm");
-        init_retrofit();
-        load_data(year,rocket);
-    }
 
     private void init_retrofit(){
         Gson gson = new GsonBuilder().setLenient().create();
@@ -126,6 +83,26 @@ public class LaunchAdapter extends RecyclerView.Adapter<LaunchAdapter.MyViewHold
         String url = launchApiInterface.loadLaunches(year,rocketId).request().url().toString();
         Call<List<Launch>> call = launchApiInterface.loadLaunches(year,rocket);
         call.enqueue(this);
+    }
+
+    @Override
+    public void onResponse(Call<List<Launch>> call, Response<List<Launch>> response) {
+
+        Log.w("LaunchAdapter", "response" );
+        if(response.isSuccessful()) {
+            launchList.clear();
+            List<Launch> launches = response.body();
+            launchList.addAll(launches);
+
+            notifyDataSetChanged();
+        } else {
+            System.out.println(response.errorBody());
+        }
+    }
+
+    @Override
+    public void onFailure(Call<List<Launch>> call, Throwable t) {
+        t.printStackTrace();
     }
 
     @Override
@@ -158,5 +135,25 @@ public class LaunchAdapter extends RecyclerView.Adapter<LaunchAdapter.MyViewHold
     @Override
     public int getItemCount() {
         return launchList.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView mission_name, flight_number,date,rocket;
+        public ImageView thumbnail;
+
+        public MyViewHolder(View view) {
+            super(view);
+            mission_name = view.findViewById(R.id.mission_name);
+            flight_number = view.findViewById(R.id.flight_number);
+            date = view.findViewById(R.id.date);
+            rocket = view.findViewById(R.id.rocket);
+            thumbnail = view.findViewById(R.id.thumbnail);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+        }
     }
 }

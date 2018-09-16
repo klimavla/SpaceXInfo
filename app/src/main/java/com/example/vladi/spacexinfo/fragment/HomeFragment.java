@@ -34,16 +34,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeFragment  extends Fragment implements Callback<Info> {
 
-
     private View mContent;
-    private RecyclerView mRecycler;
-    static final String BASE_URL = "https://api.spacexdata.com/";
+    private static final String BASE_URL = "https://api.spacexdata.com/";
+    private static final String IMG_URL = "https://www.spacex.com/sites/spacex/files/styles/new_gallery_large/public/2016_-_11-its.jpg?itok=yTl_JcuG";
     private  LinearLayout containerLayout;
+
     public static Fragment newInstance() {
         Fragment frag = new HomeFragment();
         return frag;
     }
 
+    private void add_row(String title, String value){
+        View child = getLayoutInflater().inflate(R.layout.item_card, null);
+        ((TextView)child.findViewById(R.id.item_name)).setText(title);
+        ((TextView)child.findViewById(R.id.item_value)).setText(value);
+        containerLayout.addView(child);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,7 +85,7 @@ public class HomeFragment  extends Fragment implements Callback<Info> {
         Call<Info> call = rocketAPI.loadInfo();
         call.enqueue(this);
         
-        Glide.with(getContext()).load("https://www.spacex.com/sites/spacex/files/styles/new_gallery_large/public/2016_-_11-its.jpg?itok=yTl_JcuG").into((ImageView) mContent.findViewById(R.id.backdrop));
+        Glide.with(getContext()).load(IMG_URL).into((ImageView) mContent.findViewById(R.id.backdrop));
     }
 
     @Override
@@ -109,13 +115,6 @@ public class HomeFragment  extends Fragment implements Callback<Info> {
         add_row(getContext().getString(R.string.headquarters),info.getHeadquarters().getAddress() + ", " + info.getHeadquarters().getCity() + ", " + info.getHeadquarters().getState());
 
 
-    }
-
-    private void add_row(String title, String value){
-        View child = getLayoutInflater().inflate(R.layout.item_card, null);
-        ((TextView)child.findViewById(R.id.item_name)).setText(title);
-        ((TextView)child.findViewById(R.id.item_value)).setText(value);
-        containerLayout.addView(child);
     }
 
     @Override

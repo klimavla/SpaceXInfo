@@ -28,15 +28,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 import retrofit2.Call;
 
 public class LaunchFragment extends Fragment {
 
 
-    private View mContent;
     private RecyclerView mRecycler;
     private ArrayAdapter<String> rocketAdapter;
     private ArrayList<String> ids ;
@@ -47,6 +45,13 @@ public class LaunchFragment extends Fragment {
         return frag;
     }
 
+    /**
+     * Converting dp to pixel
+     */
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +65,6 @@ public class LaunchFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mContent = view;
         mRecycler = view.findViewById(R.id.recycler_view);
         final SharedPreferences prefs = getContext().getSharedPreferences( "com.example.vladi", Context.MODE_PRIVATE);
 
@@ -137,49 +141,6 @@ public class LaunchFragment extends Fragment {
         });
     }
 
-    class RocketTask implements Runnable {
-
-
-        public RocketTask() {
-        }
-
-        @Override
-        public void run() {
-            RocketApiInterface taskService = ServiceGenerator.createService(RocketApiInterface.class);
-            Call<List<Rocket>> call = taskService.loadRockets();
-            try {
-                List<Rocket> rocketList = call.execute().body();
-                final ArrayList names = new ArrayList<>();
-                ids.clear();
-                ids.add(getActivity().getString(R.string.all));
-                names.add(getActivity().getString(R.string.all));
-                if(rocketList != null) {
-                    for (Rocket rocket : rocketList) {
-                        ids.add(rocket.getId());
-                        names.add(rocket.getName());
-                    }
-                    SharedPreferences prefs = getContext().getSharedPreferences("com.example.vladi", Context.MODE_PRIVATE);
-                    Gson gson = new Gson();
-                    prefs.edit().putString("rocket_ids", gson.toJson(ids)).apply();
-                    prefs.edit().putString("rocket_names", gson.toJson(names)).apply();
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                rocketAdapter.clear();
-                                rocketAdapter.addAll(names);
-                                rocketAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -224,12 +185,47 @@ public class LaunchFragment extends Fragment {
         }
     }
 
-    /**
-     * Converting dp to pixel
-     */
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
-    }
+    class RocketTask implements Runnable {
 
+
+        public RocketTask() {
+        }
+
+        @Override
+        public void run() {
+            RocketApiInterface taskService = ServiceGenerator.createService(RocketApiInterface.class);
+            Call<List<Rocket>> call = taskService.loadRockets();
+            try {
+                List<Rocket> rocketList = call.execute().body();
+                final ArrayList names = new ArrayList<>();
+                ids.clear();
+                ids.add(getActivity().getString(R.string.all));
+                names.add(getActivity().getString(R.string.all));
+                if(rocketList != null) {
+                    for (Rocket rocket : rocketList) {
+                        ids.add(rocket.getId());
+                        names.add(rocket.getName());
+                    }
+                    SharedPreferences prefs = getContext().getSharedPreferences("com.example.vladi", Context.MODE_PRIVATE);
+                    Gson gson = new Gson();
+                    prefs.edit().putString("rocket_ids", gson.toJson(ids)).apply();
+                    prefs.edit().putString("rocket_names", gson.toJson(names)).apply();
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                rocketAdapter.clear();
+                                rocketAdapter.addAll(names);
+                                rocketAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
 }
