@@ -24,11 +24,11 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
 
         if (id == R.id.navigation_home) {
-            frag = HomeFragment.newInstance();
+            frag = HomeFragment.Companion.newInstance();
         } else if (id == R.id.navigation_rockets) {
-            frag = RocketFragment.newInstance();
+            frag = RocketFragment.Companion.newInstance();
         } else if (id == R.id.navigation_launches) {
-            frag = LaunchFragment.newInstance();
+            frag = LaunchFragment.Companion.newInstance();
         }
 
         if (frag != null) {
